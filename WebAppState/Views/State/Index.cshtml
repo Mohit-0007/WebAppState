@@ -1,0 +1,33 @@
+﻿@model IEnumerable<WebAppState.Models.State>
+
+@{
+    ViewData["Title"] = "States List";
+}
+<a asp-controller="State" asp-action="Create" class="btn btn-primary mb-3">Create New State</a>
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+             <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var state in Model)
+    {
+        <tr>
+            <td>@state.Id</td>
+            <td>@state.Name</td>
+            <td>
+                    <a asp-controller="State" asp-action="Edit" asp-route-id="@state.Id" class="btn btn-info">Details</a>
+                    <a asp-controller="State" asp-action="Delete" asp-route-id="@state.Id" class="btn btn-warning">Edit</a>
+                    <a asp-controller="State" asp-action="Details" asp-route-id="@state.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+
+</table>
