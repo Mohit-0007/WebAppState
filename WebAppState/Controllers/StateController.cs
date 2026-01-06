@@ -6,20 +6,20 @@ namespace WebAppState.Controllers
 {
     public class StateController : Controller
     {
-        private readonly StateRepo _stateRepo;
-        public StateController(StateRepo stateRepo)
+        private readonly IStates<State> _stateRepo;
+        public StateController(IStates<State> stateRepo)
         {
             _stateRepo = stateRepo;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var states = _stateRepo.GetStatesAsync();
+            var states =await _stateRepo.GetAllAsync();
             return View(states);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var state = _stateRepo.GetStateByIdAsync(id);
+            var state =await _stateRepo.GetByIdAsync(id);
             if (state == null)
             {
                 return NotFound();
@@ -29,7 +29,7 @@ namespace WebAppState.Controllers
 
         public IActionResult Delete(int id)
         {
-            _stateRepo.DeleteStateAsync(id);
+            _stateRepo.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -39,11 +39,12 @@ namespace WebAppState.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(State state)
+        public async Task<IActionResult> Create(State state)
         {
+
             if (ModelState.IsValid)
             {
-                _stateRepo.CreateStateAsync(state);
+               await _stateRepo.CreateAsync(state);
                 return RedirectToAction("Index");
             }
             return View(state);
@@ -51,7 +52,7 @@ namespace WebAppState.Controllers
 
         public IActionResult Edit(int id)
         {
-            var state = _stateRepo.GetStateByIdAsync(id);
+            var state = _stateRepo.GetByIdAsync(id);
             if (state == null)
             {
                 return NotFound();
@@ -63,7 +64,7 @@ namespace WebAppState.Controllers
         {
             if (ModelState.IsValid)
             {
-                _stateRepo.UpdateStateAsync(state);
+                _stateRepo.UpdateAsync(state);
                 return RedirectToAction("Index");
             }
             return View(state);
@@ -71,7 +72,7 @@ namespace WebAppState.Controllers
 
         public IActionResult GetByName(string name)
         {
-            var state = _stateRepo.GetStateByNameAsync(name);
+            var state = _stateRepo.GetByNameAsync(name);
             if (state == null)
             {
                 return NotFound();

@@ -5,15 +5,18 @@ using WebAppState.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(option =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddScoped<IState,StateRepo>();
-builder.Services.AddScoped<ICity,CityRepo>();
-builder.Services.AddScoped<IDistrict,DistrictRepo>();
+
+
+builder.Services.AddScoped(typeof(IStates<>), typeof(StatesRepos<>));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
